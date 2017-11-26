@@ -1,0 +1,29 @@
+{
+  "name": "hubert",
+  "author": "Marwan Zogheib",
+  "version": "0.1.0",
+  "keywords": ["pebble-watchface"],
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "hubert",
+    "uuid": "ad7db216-2f15-430b-9e9f-5c42fc7a41cd",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "messageKeys": [
+      "dummy"
+    ],
+    "resources": {
+      "media": []
+    }
+  }
+}
