@@ -2,11 +2,15 @@
   "name": "hubert",
   "author": "Marwan Zogheib",
   "version": "0.1.0",
-  "keywords": ["pebble-watchface"],
+  "keywords": [
+    "pebble-watchface"
+  ],
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "pebble-clay": "^1.0.4"
+  },
   "pebble": {
-    "displayName": "hubert",
+    "displayName": "Hubert",
     "uuid": "ad7db216-2f15-430b-9e9f-5c42fc7a41cd",
     "sdkVersion": "3",
     "enableMultiJS": true,
@@ -20,10 +24,19 @@
       "watchface": true
     },
     "messageKeys": [
-      "dummy"
+      "MESSAGE"
     ],
     "resources": {
-      "media": []
-    }
+      "media": [
+        {
+          "type": "font",
+          "name": "CUSTOM_FONT_42",
+          "file": "leco.ttf"
+        }
+      ]
+    },
+    "capabilities": [
+      "configurable"
+    ]
   }
 }
