@@ -28,7 +28,7 @@ module.exports = [
                 "label": "Enter a message",
                 "attributes": {
                     "placeholder": "Merely immenent",
-                    "maxlength": 30,
+                    "maxlength": 140,
                     "type": "text"
                 }
             },

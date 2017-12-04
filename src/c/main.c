@@ -1,17 +1,36 @@
 #include <pebble.h>
 
+#define WINDOW_W 144
+#define WINDOW_H 168
+
+#define TIME_X 0
+#define TIME_Y 138
+#define TIME_W WINDOW_W
+#define TIME_H WINDOW_H - TIME_Y
+
+#define TIME_TEXT_X TIME_X
+#define TIME_TEXT_Y TIME_Y - 4
+#define TIME_TEXT_W TIME_W
+#define TIME_TEXT_H 40
+
+#define MESSAGE_TEXT_X 4
+#define MESSAGE_TEXT_Y -4
+#define MESSAGE_TEXT_W WINDOW_W - MESSAGE_TEXT_X
+#define MESSAGE_TEXT_H WINDOW_H - MESSAGE_TEXT_Y
+
 #define CHAR_LIMIT 140
 
 Window *my_window;
-TextLayer *time_layer, *message_layer;
+TextLayer *text_layer_time;
+TextLayer *text_layer_message;
 
 GFont font_time;
 GFont font_message;
 
 char message[CHAR_LIMIT];
 
-GColor color_top_text;
-GColor color_bot_text;
+GColor color_primary;
+GColor color_secondary;
 
 int init_finished;
 
@@ -37,12 +56,12 @@ static char *write_time(struct tm tick_time) {
 
 // Update the time and lol
 void update_time(struct tm *tick_time) {
-    text_layer_set_text(time_layer, write_time(*tick_time));
+    text_layer_set_text(text_layer_time, write_time(*tick_time));
 }
 
 // Update the lol
 void update_lol(char *text) {
-    text_layer_set_text(message_layer, text);
+    text_layer_set_text(text_layer_message, text);
 }
 
 // Ticker handler
@@ -54,8 +73,8 @@ void handle_tick(struct tm *tick_time, TimeUnits units) {
 }
 
 void init_colors() {
-    color_bot_text = GColorBlack;
-    color_top_text = GColorBlack;
+    color_primary = GColorBlack;
+    color_secondary = GColorWhite;
 }
 
 void inbox_received_handler(DictionaryIterator *iter, void *context) {
@@ -68,32 +87,39 @@ void inbox_received_handler(DictionaryIterator *iter, void *context) {
     update_lol(message);
 }
 
+void draw_background(Layer *layer, GContext *ctx) {
+    GRect bounds = layer_get_bounds(layer);
+    graphics_context_set_fill_color(ctx, color_secondary);
+    graphics_fill_rect(ctx, GRect(bounds.origin.x, bounds.origin.y, bounds.size.w, bounds.size.h), 0, GCornerNone);
+    graphics_context_set_fill_color(ctx, color_primary);
+    graphics_fill_rect(ctx, GRect(TIME_X, TIME_Y, TIME_W, TIME_H), 8, GCornersTop);
+}
+
 void main_window_load() {
-    printf("main_window_load");
-    Layer *window_layer = window_get_root_layer(my_window);
-    GRect bounds = layer_get_bounds(window_layer);
+    Layer *layer_window = window_get_root_layer(my_window);
+    GRect bounds = layer_get_bounds(layer_window);
+    layer_set_update_proc(layer_window, draw_background);
 
-    font_time = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_CUSTOM_FONT_42));
-    font_message = fonts_get_system_font(FONT_KEY_GOTHIC_28 );
+    font_time = fonts_get_system_font(FONT_KEY_GOTHIC_28);
+    font_message = fonts_get_system_font(FONT_KEY_GOTHIC_24);
 
-    time_layer = text_layer_create(GRect(0, 14, bounds.size.w, 80));
-    text_layer_set_background_color(time_layer, GColorClear);
-    text_layer_set_text_color(time_layer, color_top_text);
-    text_layer_set_font(time_layer, font_time);
-    text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
+    text_layer_time = text_layer_create(GRect(TIME_TEXT_X, TIME_TEXT_Y, TIME_TEXT_W, TIME_TEXT_H));
+    text_layer_set_background_color(text_layer_time, GColorClear);
+    text_layer_set_text_color(text_layer_time, color_secondary);
+    text_layer_set_font(text_layer_time, font_time);
+    text_layer_set_text_alignment(text_layer_time, GTextAlignmentCenter);
 
-    message_layer = text_layer_create(GRect(0, 55, bounds.size.w, 113));
-    text_layer_set_background_color(message_layer, GColorClear);
-    text_layer_set_text_color(message_layer, color_bot_text);
-    text_layer_set_font(message_layer, font_message);
-    text_layer_set_text_alignment(message_layer, GTextAlignmentCenter);
+    text_layer_message = text_layer_create(GRect(MESSAGE_TEXT_X, MESSAGE_TEXT_Y, MESSAGE_TEXT_W, MESSAGE_TEXT_H));
+    text_layer_set_background_color(text_layer_message, GColorClear);
+    text_layer_set_text_color(text_layer_message, color_primary);
+    text_layer_set_font(text_layer_message, font_message);
+    text_layer_set_text_alignment(text_layer_message, GTextAlignmentLeft);
 
-    layer_add_child(window_layer, text_layer_get_layer(time_layer));
-    layer_add_child(window_layer, text_layer_get_layer(message_layer));
+    layer_add_child(layer_window, text_layer_get_layer(text_layer_time));
+    layer_add_child(layer_window, text_layer_get_layer(text_layer_message));
 
     // If any persistant data then load those and update colors
     if (persist_read_string(MESSAGE_KEY_MESSAGE, message, CHAR_LIMIT)) {
-        printf("persist_read_string");
         // Do nothing?
     } else {
     }
@@ -102,9 +128,8 @@ void main_window_load() {
 }
 
 void main_window_unload() {
-    layer_destroy(text_layer_get_layer(time_layer));
-    layer_destroy(text_layer_get_layer(message_layer));
-    fonts_unload_custom_font(font_time);
+    layer_destroy(text_layer_get_layer(text_layer_time));
+    layer_destroy(text_layer_get_layer(text_layer_message));
 }
 
 void init() {
@@ -114,7 +139,6 @@ void init() {
     init_colors();
 
     // Set handlers to manage the elements inside the Window
-    printf("init");
     window_set_window_handlers(my_window, (WindowHandlers) {
         .load = main_window_load,
         .unload = main_window_unload
