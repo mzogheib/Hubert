@@ -14,9 +14,11 @@
 #define TIME_TEXT_H 40
 
 #define MESSAGE_TEXT_X 4
-#define MESSAGE_TEXT_Y -4
-#define MESSAGE_TEXT_W WINDOW_W - MESSAGE_TEXT_X
+#define MESSAGE_TEXT_Y 0
+#define MESSAGE_TEXT_W WINDOW_W - 8
 #define MESSAGE_TEXT_H WINDOW_H - MESSAGE_TEXT_Y
+
+#define CUSTOM_FONT RESOURCE_ID_CUSTOM_FONT_20
 
 #define CHAR_LIMIT 140
 
@@ -101,7 +103,7 @@ void main_window_load() {
     layer_set_update_proc(layer_window, draw_background);
 
     font_time = fonts_get_system_font(FONT_KEY_GOTHIC_28);
-    font_message = fonts_get_system_font(FONT_KEY_GOTHIC_24);
+    font_message = fonts_load_custom_font(resource_get_handle(CUSTOM_FONT));
 
     text_layer_time = text_layer_create(GRect(TIME_TEXT_X, TIME_TEXT_Y, TIME_TEXT_W, TIME_TEXT_H));
     text_layer_set_background_color(text_layer_time, GColorClear);
@@ -130,6 +132,7 @@ void main_window_load() {
 void main_window_unload() {
     layer_destroy(text_layer_get_layer(text_layer_time));
     layer_destroy(text_layer_get_layer(text_layer_message));
+    fonts_unload_custom_font(font_message);
 }
 
 void init() {

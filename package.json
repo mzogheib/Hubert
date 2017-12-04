@@ -16,9 +16,7 @@
     "enableMultiJS": true,
     "targetPlatforms": [
       "aplite",
-      "basalt",
-      "chalk",
-      "diorite"
+      "basalt"
     ],
     "watchapp": {
       "watchface": true
@@ -30,8 +28,8 @@
       "media": [
         {
           "type": "font",
-          "name": "CUSTOM_FONT_42",
-          "file": "leco.ttf"
+          "name": "CUSTOM_FONT_20",
+          "file": "Kurale-Regular.ttf"
         }
       ]
     },

@@ -17,8 +17,6 @@ Pebble.addEventListener('webviewclosed', function(e) {
     // Get the keys and values from each config item
     clay.getSettings(e.response);
     var dict = JSON.parse(localStorage.getItem('clay-settings'));
-    // Parse the value to an int for the watch
-//     dict['CHOSEN_COLOR'] = parseInt(dict['CHOSEN_COLOR'], 10);
     
     // Send settings values to watch side
     Pebble.sendAppMessage(dict, function(e) {

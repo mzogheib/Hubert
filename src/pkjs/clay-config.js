@@ -1,7 +1,7 @@
 module.exports = [
     {
         "type": "heading",
-        "defaultValue": "LOL Time Configuration"
+        "defaultValue": "Hubert Configuration"
     },
     {
         "type": "section",
