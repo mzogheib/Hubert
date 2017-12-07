@@ -118,12 +118,10 @@ void main_window_load() {
     layer_add_child(layer_window, text_layer_get_layer(text_layer_time));
     layer_add_child(layer_window, text_layer_get_layer(text_layer_message));
 
-    // If any persistant data then load those and update colors
-    if (persist_read_string(MESSAGE_KEY_MESSAGE, message, CHAR_LIMIT)) {
-        // Do nothing?
-    } else {
+    if (persist_exists(MESSAGE_KEY_MESSAGE)) {
+        persist_read_string(MESSAGE_KEY_MESSAGE, message, CHAR_LIMIT);
+        update_message(message);
     }
-    update_message(message);
 
 }
 
