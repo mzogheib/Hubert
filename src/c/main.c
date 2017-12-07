@@ -56,13 +56,11 @@ static char *write_time(struct tm tick_time) {
     return (char *)buffer;
 }
 
-// Update the time and lol
 void update_time(struct tm *tick_time) {
     text_layer_set_text(text_layer_time, write_time(*tick_time));
 }
 
-// Update the lol
-void update_lol(char *text) {
+void update_message(char *text) {
     text_layer_set_text(text_layer_message, text);
 }
 
@@ -80,13 +78,13 @@ void init_colors() {
 }
 
 void inbox_received_handler(DictionaryIterator *iter, void *context) {
-    Tuple *chosen_color_t = dict_find(iter, MESSAGE_KEY_MESSAGE);
+    Tuple *recieved_message = dict_find(iter, MESSAGE_KEY_MESSAGE);
 
-    if (chosen_color_t) {
-        strncpy(message, chosen_color_t->value->cstring, CHAR_LIMIT);
+    if (recieved_message) {
+        strncpy(message, recieved_message->value->cstring, CHAR_LIMIT);
         persist_write_string(MESSAGE_KEY_MESSAGE, message);
     }
-    update_lol(message);
+    update_message(message);
 }
 
 void draw_background(Layer *layer, GContext *ctx) {
@@ -125,7 +123,7 @@ void main_window_load() {
         // Do nothing?
     } else {
     }
-    update_lol(message);
+    update_message(message);
 
 }
 
@@ -149,7 +147,7 @@ void init() {
 
     window_stack_push(my_window, true);
 
-    // Time & LOL for display on start up
+    // Time for display on start up
     init_finished = 0;
     time_t temp_time = time(NULL);
     struct tm *tick_time = localtime(&temp_time);
