@@ -23,7 +23,8 @@
       "watchface": true
     },
     "messageKeys": [
-      "MESSAGE"
+      "MESSAGE",
+      "LOCATION"
     ],
     "resources": {
       "media": [
