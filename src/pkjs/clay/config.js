@@ -5,21 +5,6 @@ module.exports = [
     },
     {
         "type": "section",
-        "capabilities": ["BW"],
-        "items": [
-            {
-                "type": "text",
-                "defaultValue": "No settings for B&W Pebbles!"
-            },
-            {
-                "type": "submit",
-                "defaultValue": "Close"
-            }
-        ]
-    },
-    {
-        "type": "section",
-        "capabilities": ["COLOR"],
         "items": [
             {
                 "type": "input",
