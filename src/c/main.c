@@ -83,8 +83,24 @@ void update_message(char *text) {
     text_layer_set_text(text_layer_message, text);
 }
 
+void display_image(uint8_t image_res) {  
+    gbitmap_destroy(image);
+    image = gbitmap_create_with_resource(image_res);
+    size_image = gbitmap_get_bounds(image).size;  
+    layer_image = bitmap_layer_create(GRect(LOCATION_IMAGE_X, LOCATION_IMAGE_Y, size_image.w, size_image.h));
+    layer_mark_dirty(bitmap_layer_get_layer(layer_image));
+}
+
+// The draw function, called whenever the passed in layer is marked dirty
+static void image_layer_update_callback(Layer *layer, GContext* ctx) {
+    // Transparency if applicable
+    graphics_context_set_compositing_mode(ctx, GCompOpSet);
+    graphics_draw_bitmap_in_rect(ctx, image, GRect(0, 0, size_image.w, size_image.h));
+}
+
 void update_location(char *text) {
     text_layer_set_text(text_layer_location, text);
+    display_image(strcmp(text, "Unknown Location") == 0 ? RESOURCE_ID_IMAGE_LOCATION_ERROR : RESOURCE_ID_IMAGE_LOCATION_SUCCESS);
 }
 
 // Ticker handler
@@ -135,11 +151,8 @@ void main_window_load() {
     font_message = fonts_get_system_font(FONT_KEY_GOTHIC_24);
     font_location = fonts_get_system_font(FONT_KEY_GOTHIC_18);
 
-    image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_LOCATION_SUCCESS);
-    size_image = gbitmap_get_bounds(image).size;
-    layer_image = bitmap_layer_create(GRect(LOCATION_IMAGE_X, LOCATION_IMAGE_Y, size_image.w, size_image.h));
-    bitmap_layer_set_compositing_mode(layer_image, GCompOpSet);
-    bitmap_layer_set_bitmap(layer_image, image);
+    display_image(RESOURCE_ID_IMAGE_LOCATION_ERROR);
+    layer_set_update_proc(bitmap_layer_get_layer(layer_image), image_layer_update_callback);
 
     text_layer_time = text_layer_create(GRect(TIME_TEXT_X, TIME_TEXT_Y, TIME_TEXT_W, TIME_TEXT_H));
     text_layer_set_background_color(text_layer_time, GColorClear);
