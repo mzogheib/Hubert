@@ -8,7 +8,6 @@ module.exports = [
                 "defaultValue": "",
                 "label": "Enter a message",
                 "attributes": {
-                    "placeholder": "Merely immenent",
                     "maxlength": 140,
                     "type": "text"
                 }

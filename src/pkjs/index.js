@@ -8,6 +8,8 @@ var googleMapsUtils = require('./google-maps/utils');
 var locationText = 'Unknown Location';
 
 Pebble.addEventListener('showConfiguration', function(e) {
+    // Reset message
+    clay.setSettings({ MESSAGE: '' });
     Pebble.openURL(clay.generateUrl());
     window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
     
