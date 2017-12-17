@@ -7,6 +7,7 @@
   ],
   "private": true,
   "dependencies": {
+    "lodash": "^4.17.4",
     "pebble-clay": "^1.0.4"
   },
   "pebble": {
@@ -22,7 +23,8 @@
       "watchface": true
     },
     "messageKeys": [
-      "MESSAGE"
+      "MESSAGE",
+      "LOCATION"
     ],
     "resources": {
       "media": [
@@ -30,6 +32,16 @@
           "type": "font",
           "name": "CUSTOM_FONT_20",
           "file": "Kurale-Regular.ttf"
+        },
+        {
+          "type": "png",
+          "name": "IMAGE_LOCATION_SUCCESS",
+          "file": "map-marker.png"
+        },
+        {
+          "type": "png",
+          "name": "IMAGE_LOCATION_ERROR",
+          "file": "map-marker-off.png"
         }
       ]
     },
