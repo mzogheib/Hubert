@@ -1,9 +1,5 @@
 module.exports = [
     {
-        "type": "heading",
-        "defaultValue": "Hubert Configuration"
-    },
-    {
         "type": "section",
         "items": [
             {
