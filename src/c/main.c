@@ -4,7 +4,7 @@
 #define WINDOW_H 168
 
 #define TIME_X 0
-#define TIME_Y 138
+#define TIME_Y 140
 #define TIME_W WINDOW_W
 #define TIME_H WINDOW_H - TIME_Y
 
@@ -16,14 +16,21 @@
 #define MESSAGE_TEXT_X 4
 #define MESSAGE_TEXT_Y -4
 #define MESSAGE_TEXT_W WINDOW_W - 8
-#define MESSAGE_TEXT_H 120
+#define MESSAGE_TEXT_H 125
 
 #define LOCATION_TEXT_X 4
-#define LOCATION_TEXT_Y 115
+#define LOCATION_TEXT_Y 117
 #define LOCATION_TEXT_W WINDOW_W - 8
-#define LOCATION_TEXT_H 20
+#define LOCATION_TEXT_H 25
+
+#define LOCATION_IMAGE_X 2
+#define LOCATION_IMAGE_Y 120
+#define LOCATION_IMAGE_W WINDOW_W - 8
+#define LOCATION_IMAGE_H 20
 
 #define CUSTOM_FONT RESOURCE_ID_CUSTOM_FONT_20
+#define IMAGE_LOCATION_SUCCESS RESOURCE_ID_IMAGE_LOCATION_SUCCESS
+#define IMAGE_LOCATION_ERROR RESOURCE_ID_IMAGE_LOCATION_ERROR
 
 #define CHAR_LIMIT 140
 
@@ -31,6 +38,10 @@ Window *my_window;
 TextLayer *text_layer_time;
 TextLayer *text_layer_message;
 TextLayer *text_layer_location;
+
+BitmapLayer *layer_image;
+GBitmap *image;
+GSize size_image;
 
 GFont font_time;
 GFont font_message;
@@ -124,6 +135,12 @@ void main_window_load() {
     font_message = fonts_get_system_font(FONT_KEY_GOTHIC_24);
     font_location = fonts_get_system_font(FONT_KEY_GOTHIC_18);
 
+    image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_LOCATION_SUCCESS);
+    size_image = gbitmap_get_bounds(image).size;
+    layer_image = bitmap_layer_create(GRect(LOCATION_IMAGE_X, LOCATION_IMAGE_Y, size_image.w, size_image.h));
+    bitmap_layer_set_compositing_mode(layer_image, GCompOpSet);
+    bitmap_layer_set_bitmap(layer_image, image);
+
     text_layer_time = text_layer_create(GRect(TIME_TEXT_X, TIME_TEXT_Y, TIME_TEXT_W, TIME_TEXT_H));
     text_layer_set_background_color(text_layer_time, GColorClear);
     text_layer_set_text_color(text_layer_time, color_secondary);
@@ -137,7 +154,7 @@ void main_window_load() {
     text_layer_set_text_alignment(text_layer_message, GTextAlignmentLeft);
     text_layer_set_overflow_mode(text_layer_message, GTextOverflowModeTrailingEllipsis);
 
-    text_layer_location = text_layer_create(GRect(LOCATION_TEXT_X, LOCATION_TEXT_Y, LOCATION_TEXT_W, LOCATION_TEXT_H));
+    text_layer_location = text_layer_create(GRect(LOCATION_IMAGE_X + size_image.w - 1, LOCATION_TEXT_Y, LOCATION_TEXT_W, LOCATION_TEXT_H));
     text_layer_set_background_color(text_layer_location, GColorClear);
     text_layer_set_text_color(text_layer_location, color_primary);
     text_layer_set_font(text_layer_location, font_location);
@@ -147,6 +164,7 @@ void main_window_load() {
     layer_add_child(layer_window, text_layer_get_layer(text_layer_time));
     layer_add_child(layer_window, text_layer_get_layer(text_layer_message));
     layer_add_child(layer_window, text_layer_get_layer(text_layer_location));
+    layer_add_child(layer_window, bitmap_layer_get_layer(layer_image));
 
     if (persist_exists(MESSAGE_KEY_MESSAGE)) {
         persist_read_string(MESSAGE_KEY_MESSAGE, message, CHAR_LIMIT);
@@ -165,6 +183,8 @@ void main_window_unload() {
     layer_destroy(text_layer_get_layer(text_layer_message));
     layer_destroy(text_layer_get_layer(text_layer_location));
     // fonts_unload_custom_font(font_message);
+    bitmap_layer_destroy(layer_image);
+    gbitmap_destroy(image);
 }
 
 void init() {
