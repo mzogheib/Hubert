@@ -28,7 +28,6 @@
 #define LOCATION_IMAGE_W WINDOW_W - 8
 #define LOCATION_IMAGE_H 20
 
-#define CUSTOM_FONT RESOURCE_ID_CUSTOM_FONT_20
 #define IMAGE_LOCATION_SUCCESS RESOURCE_ID_IMAGE_LOCATION_SUCCESS
 #define IMAGE_LOCATION_ERROR RESOURCE_ID_IMAGE_LOCATION_ERROR
 
@@ -147,7 +146,6 @@ void main_window_load() {
     layer_set_update_proc(layer_window, draw_background);
 
     font_time = fonts_get_system_font(FONT_KEY_GOTHIC_28);
-    // font_message = fonts_load_custom_font(resource_get_handle(CUSTOM_FONT));
     font_message = fonts_get_system_font(FONT_KEY_GOTHIC_24);
     font_location = fonts_get_system_font(FONT_KEY_GOTHIC_18);
 
@@ -199,7 +197,6 @@ void main_window_unload() {
     layer_destroy(text_layer_get_layer(text_layer_time));
     layer_destroy(text_layer_get_layer(text_layer_message));
     layer_destroy(text_layer_get_layer(text_layer_location));
-    // fonts_unload_custom_font(font_message);
     bitmap_layer_destroy(layer_image);
     gbitmap_destroy(image);
 }

@@ -29,11 +29,6 @@
     "resources": {
       "media": [
         {
-          "type": "font",
-          "name": "CUSTOM_FONT_20",
-          "file": "Kurale-Regular.ttf"
-        },
-        {
           "type": "png",
           "name": "IMAGE_LOCATION_SUCCESS",
           "file": "map-marker.png"
