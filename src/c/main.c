@@ -182,11 +182,15 @@ void main_window_load() {
     if (persist_exists(MESSAGE_KEY_MESSAGE)) {
         persist_read_string(MESSAGE_KEY_MESSAGE, message, CHAR_LIMIT);
         update_message(message);
+    } else {
+        update_message("Add a message via the Pebble app.");
     }
 
     if (persist_exists(MESSAGE_KEY_LOCATION)) {
         persist_read_string(MESSAGE_KEY_LOCATION, location, CHAR_LIMIT);
         update_location(location);
+    } else {
+        update_location("Unknown Location");
     }
 
 }
